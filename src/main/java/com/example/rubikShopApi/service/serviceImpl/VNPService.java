@@ -53,7 +53,7 @@ public class VNPService implements IVNPService{
 	            vnp_Params.put("vnp_BankCode", bankCode);
 	        }
 	        vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-	        vnp_Params.put("vnp_OrderInfo", "Nap tien cho thue bao 0123456789. So tien 100,000 VND");
+	        vnp_Params.put("vnp_OrderInfo", orderInfor);
 	        vnp_Params.put("vnp_OrderType", orderType);
 
 	        String locate = "vn";

@@ -1,6 +1,7 @@
 package com.example.rubikShopApi.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,5 +19,7 @@ public interface IOrderService {
 	Page<Order> findAll(Pageable pageable);
 
 	<S extends Order> S save(S entity);
+
+	Optional<Order> findById(Integer id);
 
 }

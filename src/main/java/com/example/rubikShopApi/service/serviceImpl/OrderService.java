@@ -1,6 +1,7 @@
 package com.example.rubikShopApi.service.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,5 +46,12 @@ public class OrderService implements IOrderService {
 	public void deleteById(Integer id) {
 		orderRepository.deleteById(id);
 	}
+
+	@Override
+	public Optional<Order> findById(Integer id) {
+		return orderRepository.findById(id);
+	}
+	
+	
 
 }
