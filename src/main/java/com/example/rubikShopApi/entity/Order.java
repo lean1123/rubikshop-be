@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -38,6 +40,7 @@ public class Order {
 	private Double totalAmount;
 
 	@ToString.Exclude
+	@JsonIgnore
 	@OneToMany(mappedBy = "order", cascade = { CascadeType.ALL })
 	private List<OrderDetail> orderDetail;
 
@@ -45,6 +48,9 @@ public class Order {
 
 	@Embedded
 	private ShippingInfo shippingInfo;
+	
+	@OneToOne(mappedBy = "order")
+	private PaymentInfo paymentInfo;
 
 	public Order(User user, LocalDate orderDate, List<OrderDetail> orderDetail, String paymentMethod) {
 		this.user = user;

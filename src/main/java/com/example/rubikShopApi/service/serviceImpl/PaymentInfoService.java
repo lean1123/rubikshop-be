@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.example.rubikShopApi.entity.Order;
 import com.example.rubikShopApi.entity.PaymentInfo;
 import com.example.rubikShopApi.repository.PaymentInfoRepository;
 import com.example.rubikShopApi.service.IPaymentInfoService;
@@ -49,6 +50,11 @@ public class PaymentInfoService implements IPaymentInfoService{
 	@Override
 	public void deleteById(Integer id) {
 		paymentInfoRepository.deleteById(id);
+	}
+
+	@Override
+	public Optional<PaymentInfo> findByOrder(Order order) {
+		return paymentInfoRepository.findByOrder(order);
 	}
 	
 	

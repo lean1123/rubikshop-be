@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.example.rubikShopApi.entity.Order;
 import com.example.rubikShopApi.entity.PaymentInfo;
 
 public interface IPaymentInfoService {
@@ -21,5 +22,7 @@ public interface IPaymentInfoService {
 	Page<PaymentInfo> findAll(Pageable pageable);
 
 	<S extends PaymentInfo> S save(S entity);
+
+	Optional<PaymentInfo> findByOrder(Order order);
 
 }

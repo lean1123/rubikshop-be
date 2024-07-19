@@ -1,5 +1,6 @@
 package com.example.rubikShopApi.controller.user;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rubikShopApi.config.VNPConfig;
@@ -35,6 +38,7 @@ import com.example.rubikShopApi.service.IUserService;
 import com.example.rubikShopApi.service.IVNPService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/order")
@@ -109,36 +113,43 @@ public class OrderController {
 	}
 
 	@GetMapping("/returnOrder")
-	public ResponseEntity<PaymentInfo> paymentCompleted(HttpServletRequest request, Model model) {
-		int paymentStatus = ivnpService.orderReturn(request);
+    public void paymentCompleted(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int paymentStatus = ivnpService.orderReturn(request);
 
-		String orderInfo = request.getParameter("vnp_OrderInfo");
-		String paymentTime = request.getParameter("vnp_PayDate");
-		String transactionId = request.getParameter("vnp_TransactionNo");
-		String totalPrice = request.getParameter("vnp_Amount");
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String paymentTime = request.getParameter("vnp_PayDate");
+        String transactionId = request.getParameter("vnp_TransactionNo");
+        String totalPrice = request.getParameter("vnp_Amount");
 
-		
-		Optional<Order> order = orderService.findById(Integer.valueOf(orderInfo));
-		
-		if(order.isPresent()) {
-			if(paymentStatus == 1) {
-				PaymentInfo info = new PaymentInfo();
-				info.setPayContent("Thanh toan cho hoa don " + orderInfo);
-				info.setPaymentTime(paymentTime);
-				info.setTransactionId(transactionId);
-				info.setOrder(order.get());
-				
-				paymentInfoService.save(info);
-				
-				order.get().setPaymented(true);
-				orderService.save(order.get());
-				
-				return ResponseEntity.ok().body(info);
-			}
-			return ResponseEntity.badRequest().body(null);
-		}
+        String redirectUrl = "http://localhost:3000/returnOrder?orderID=" + orderInfo;
 
-		return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(null);
-	}
+        if (orderInfo == null || paymentTime == null || transactionId == null || totalPrice == null) {
+            response.sendRedirect(redirectUrl + "&transactionStatus=fail");
+            return;
+        }
+
+        Optional<Order> order = orderService.findById(Integer.valueOf(orderInfo));
+
+        if (order.isPresent()) {
+            if (paymentStatus == 1) {
+                PaymentInfo info = new PaymentInfo();
+                info.setPayContent("Thanh toan cho hoa don " + orderInfo);
+                info.setPaymentTime(paymentTime);
+                info.setTransactionId(transactionId);
+                info.setOrder(order.get());
+
+                paymentInfoService.save(info);
+
+                order.get().setPaymented(true);
+                orderService.save(order.get());
+
+                response.sendRedirect(redirectUrl + "&transactionStatus=success");
+                return;
+            }
+        }
+
+        response.sendRedirect(redirectUrl + "&transactionStatus=fail");
+    }
+
 
 }
