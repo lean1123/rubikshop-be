@@ -106,7 +106,7 @@ public class ProductControllerForAdmin {
 			pageNumbers = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "List video", result));
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(null, "OK", "List video", result));
 	}
 
 	@GetMapping("/{id}")
@@ -235,18 +235,18 @@ public class ProductControllerForAdmin {
 			try {
 				productService.deleteById(productID);
 				message = "Xoa thanh cong!";
-				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", message, null));
+				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(null, "OK", message, null));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				message = e.toString();
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-						.body(new ResponseObject("FAILURE", message, null));
+						.body(new ResponseObject(null, "FAILURE", message, null));
 			}
 
 		}
 
 		message = "Khong tim thay video";
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("NOT FOUND", message, null));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(null, "NOT FOUND", message, null));
 	}
 
 	@GetMapping("search")

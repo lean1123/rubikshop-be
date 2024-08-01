@@ -18,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,20 +64,21 @@ public class OrderController {
 	public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderData, HttpServletRequest request)
 			throws UnsupportedEncodingException {
 		// Find the user by ID
-		Optional<User> user = userService.findById(orderData.getUserID());
+		User user = userService.findById(orderData.getUserID());
 
-		if (user.isPresent()) {
+		if (user != null) {
 			Order entity = new Order();
 
 			BeanUtils.copyProperties(orderData, entity);
 
-			entity.setUser(user.get());
+			entity.setUser(user);
 
 			ShippingInfo shipInfo = new ShippingInfo("", orderData.getRoadName(), orderData.getDistrict(),
 					orderData.getCity());
 			entity.setShippingInfo(shipInfo);
 
 			entity.setOrderDate(LocalDate.now());
+			
 			orderService.save(entity);
 
 			List<CartItem> cartItems = orderData.getCartItems();
@@ -94,7 +96,12 @@ public class OrderController {
 						cartItem.getProduct().getProductID());
 				orderDetail.setId(primaryKey);
 
-				orderDetailService.save(orderDetail);
+				try {
+					orderDetailService.save(orderDetail);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			if (entity.getPaymentMethod().equalsIgnoreCase("VNPAY")) {

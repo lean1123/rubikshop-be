@@ -1,20 +1,14 @@
 package com.example.rubikShopApi.request;
 
-import com.google.common.base.Optional;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class ResponseObject {
+public class IntroSpectRequest {
 	private String token;
-	private String statusCode;
-	private String message;
-	private Object data;
-	
 }

@@ -16,18 +16,14 @@ public class RegisterForm {
 	
 	@NotEmpty
 	private String fullName;
-	@NotEmpty(message = "Email is required")
-    @Email(message = "Invalid email format")
 	private String email;
-	@NotEmpty(message = "Password is required")
-	@Min(value = 6)
 	private String password;
-	@NotEmpty(message = "Retype password is required")
-	@Min(value = 6)
 	private String retypePassword;
-	@NotEmpty(message = "Address is required")
 	private String address;
 	private Role role = Role.USER;
+	private String imageUrl;
+	
+	private Boolean isOauth2 = false;
 	
 	
 	

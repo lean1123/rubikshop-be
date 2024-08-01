@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.example.rubikShopApi.entity.User;
 
@@ -16,7 +17,7 @@ public interface IUserService {
 
 	boolean existsById(Integer id);
 
-	Optional<User> findById(Integer id);
+	User findById(Integer id);
 
 	List<User> findAll();
 
@@ -25,5 +26,7 @@ public interface IUserService {
 	<S extends User> S save(S entity);
 
 	Optional<User> findByEmail(String email);
+
+	User getMyInfo();
 
 }

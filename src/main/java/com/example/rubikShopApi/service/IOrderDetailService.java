@@ -17,5 +17,5 @@ public interface IOrderDetailService {
 
 	long count();
 
-	<S extends OrderDetail> S save(S entity);
+	<S extends OrderDetail> S save(S entity) throws Exception;
 }

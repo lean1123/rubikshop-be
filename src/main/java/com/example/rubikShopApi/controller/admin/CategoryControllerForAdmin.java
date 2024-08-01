@@ -206,7 +206,7 @@ public class CategoryControllerForAdmin {
 //			pageNumbers = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
 //		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "List video", result));
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(null,"OK", "List video", result));
 	}
 
 	@GetMapping("/images/{fileName:.+}")

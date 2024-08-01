@@ -80,7 +80,7 @@ public class ProductController {
 			pageNumbers = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("OK", "List video", result));
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(null, "OK", "List video", result));
 	}
 	
 	@GetMapping("/{id}")
@@ -96,5 +96,10 @@ public class ProductController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.badRequest().body(null);
+	}
+	
+	@GetMapping("")
+	public ResponseEntity<?> getAll(){
+		return ResponseEntity.ok().body("Success Access!");
 	}
 }

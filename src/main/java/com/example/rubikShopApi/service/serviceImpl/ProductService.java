@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.example.rubikShopApi.entity.Category;
@@ -24,6 +25,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public <S extends Product> S save(S entity) {
 		return productRepository.save(entity);
 	}
@@ -44,6 +46,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ADMIN')")
 	public void deleteById(Integer id) {
 		productRepository.deleteById(id);
 	}
