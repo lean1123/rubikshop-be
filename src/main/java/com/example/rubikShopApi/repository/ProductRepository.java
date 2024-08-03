@@ -17,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	Page<Product> findByCategory(Category categoryID, Pageable pageable);
 	Page<Product> findByUnitPriceBetween(double fromAmount, double toAmount, Pageable pageable);
 	Page<Product> findByActive(boolean active, Pageable pageable);
+
+
 }

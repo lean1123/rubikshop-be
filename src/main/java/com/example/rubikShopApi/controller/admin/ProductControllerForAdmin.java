@@ -274,6 +274,24 @@ public class ProductControllerForAdmin {
 				.body(resource);
 	}
 
+	@GetMapping("")
+	public ResponseEntity<?> getAllProductPageable(@RequestParam int page, @RequestParam int size){
+
+		try{
+			Sort sort = Sort.by("productName").ascending();
+			Pageable pageable = PageRequest.of(page, size, sort);
+			Page<Product> result = null;
+
+			result = productService.findAll(pageable);
+
+			return ResponseEntity.ok().body(result);
+
+		}catch (Exception e) {
+			System.out.println(e.toString());
+			return ResponseEntity.badRequest().body(e.toString());
+		}
+	}
+
 //	@GetMapping("searchPagination")
 //	public ResponseEntity<ResponseObject> searchAndPaginating(@RequestParam Optional<String> searchValue,
 //			@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size,

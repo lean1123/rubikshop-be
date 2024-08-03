@@ -2,10 +2,14 @@ package com.example.rubikShopApi.service.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +17,7 @@ import com.example.rubikShopApi.entity.Category;
 import com.example.rubikShopApi.entity.Product;
 import com.example.rubikShopApi.repository.ProductRepository;
 import com.example.rubikShopApi.service.IProductService;
+import org.springframework.util.StringUtils;
 
 @Service
 public class ProductService implements IProductService {
@@ -32,6 +37,7 @@ public class ProductService implements IProductService {
 
 	@Override
 	public Page<Product> findAll(Pageable pageable) {
+
 		return productRepository.findAll(pageable);
 	}
 
