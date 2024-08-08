@@ -18,7 +18,7 @@ import lombok.experimental.NonFinal;
 public class SecurityConfig {
 	@NonFinal
 	private final String[] PUBLIC_URL = { "/user/register", "/user/login", "/admin/register", "/admin/login",
-			"/auth/introspect", "/auth/logout", "/admin/categories/searchPagination", "/products/searchPagination", "/auth/refresh", "/admin/products" };
+			"/auth/introspect", "/auth/logout", "/admin/categories/searchPagination", "/products/searchPagination", "/auth/refresh", "/admin/products",  "/admin/categories"};
 
 	@NonFinal
 	@Value("${jwt.SIGNER_KEY}")
