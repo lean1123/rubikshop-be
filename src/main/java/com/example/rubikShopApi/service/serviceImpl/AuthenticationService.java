@@ -145,17 +145,17 @@ public class AuthenticationService {
 		SignedJWT signedJWT = SignedJWT.parse(token);
 
 		Date expiryTime = (isRefresh)
-				? new Date(signedJWT.getJWTClaimsSet().getIssueTime().toInstant().plus(REFRESH_TIME, ChronoUnit.SECONDS)
+				? new Date(signedJWT.getJWTClaimsSet().getExpirationTime().toInstant().plus(REFRESH_TIME, ChronoUnit.SECONDS)
 						.toEpochMilli())
 				: signedJWT.getJWTClaimsSet().getExpirationTime();
 
 		var verified = signedJWT.verify(verifier);
 
 		if (!(verified && expiryTime.after(new Date())))
-			throw new Exception("Unauthented");
+			throw new Exception("Unauthenticated");
 
 		if (invalidTokenRepository.existsById(signedJWT.getJWTClaimsSet().getJWTID()))
-			throw new Exception("Unauthented");
+			throw new Exception("Unauthenticated");
 
 		return signedJWT;
 	}
