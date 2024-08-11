@@ -40,7 +40,6 @@ public class Order {
 	private Double totalAmount;
 
 	@ToString.Exclude
-	@JsonIgnore
 	@OneToMany(mappedBy = "order", cascade = { CascadeType.ALL })
 	private List<OrderDetail> orderDetail;
 

@@ -49,7 +49,7 @@ public class UserService implements IUserService {
 		
 		var result = userRepo.findById(id);
 		
-		return result.isPresent() ? result.get() : null;
+		return result.orElse(null);
 	}
 
 	@Override
@@ -79,14 +79,9 @@ public class UserService implements IUserService {
 		
 		String email = context.getAuthentication().getName();
 		
-		System.out.println(email);
-		
 		Optional<User> opt = userRepo.findByEmail(email);
-		
-		if(opt.isPresent()) {
-			return opt.get();
-		}
-		
-		return null;
-	}
+
+        return opt.orElse(null);
+
+    }
 }

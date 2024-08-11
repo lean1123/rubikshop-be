@@ -22,4 +22,5 @@ public interface IOrderService {
 
 	Optional<Order> findById(Integer id);
 
+    Page<Order> findByUser(Pageable pageable);
 }

@@ -7,8 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.rubikShopApi.entity.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,12 +29,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rubikShopApi.config.VNPConfig;
-import com.example.rubikShopApi.entity.Order;
-import com.example.rubikShopApi.entity.OrderDetail;
-import com.example.rubikShopApi.entity.OrderDetailPrimaryKey;
-import com.example.rubikShopApi.entity.PaymentInfo;
-import com.example.rubikShopApi.entity.ShippingInfo;
-import com.example.rubikShopApi.entity.User;
 import com.example.rubikShopApi.request.CartItem;
 import com.example.rubikShopApi.request.OrderRequest;
 import com.example.rubikShopApi.service.IOrderDetailService;
@@ -158,5 +157,16 @@ public class OrderController {
         response.sendRedirect(redirectUrl + "&transactionStatus=fail");
     }
 
+	@GetMapping("listOrder")
+	public ResponseEntity<?> getListOrderByUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "9") int size,
+												@RequestParam(defaultValue = "dsc") String sortDirector){
+        Sort sort = sortDirector.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by("orderDate").ascending()
+				: Sort.by("orderDate").descending();
 
+		Pageable pageable = PageRequest.of(page, size, sort);
+
+		Page<Order> result = null;
+
+		return ResponseEntity.ok().body(orderService.findByUser(pageable));
+	}
 }

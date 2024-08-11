@@ -5,6 +5,7 @@
  */
 package com.example.rubikShopApi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class OrderDetail {
 	private OrderDetailPrimaryKey id = new OrderDetailPrimaryKey();
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "order_Id")
 	@MapsId("orderId")
 	private Order order;
