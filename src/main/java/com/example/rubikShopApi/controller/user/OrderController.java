@@ -118,8 +118,11 @@ public class OrderController {
 		return ResponseEntity.badRequest().body(null);
 	}
 
-	@GetMapping("/returnOrder")
-    public void paymentCompleted(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@GetMapping(path =  "/returnOrder")
+    public void paymentCompleted(HttpServletRequest request, HttpServletResponse response,
+								 @RequestHeader(value = "Authorization", required = false) String authHeader
+	) throws IOException {
+
         int paymentStatus = ivnpService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");

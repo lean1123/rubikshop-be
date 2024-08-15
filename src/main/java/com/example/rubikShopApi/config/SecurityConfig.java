@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -18,7 +19,8 @@ import lombok.experimental.NonFinal;
 public class SecurityConfig {
 	@NonFinal
 	private final String[] PUBLIC_URL = { "/user/register", "/user/login", "/admin/register", "/admin/login",
-			"/auth/introspect", "/auth/logout", "/admin/categories/searchPagination", "/products/searchPagination", "/auth/refresh", "/admin/products",  "/admin/categories"};
+			"/auth/introspect", "/auth/logout", "/admin/categories/searchPagination", "/products/searchPagination",
+			"/auth/refresh", "/admin/products",  "/admin/categories", "/order/returnOrder"};
 
 	@NonFinal
 	@Value("${jwt.SIGNER_KEY}")
@@ -37,7 +39,7 @@ public class SecurityConfig {
 		httpSecurity.oauth2ResourceServer(t -> t
 				.jwt(cus -> cus.decoder(customJwtDecoder).jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
-		httpSecurity.csrf(t -> t.disable());
+		httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
 		return httpSecurity.build();
 	}

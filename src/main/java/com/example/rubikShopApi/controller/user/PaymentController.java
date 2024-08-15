@@ -24,13 +24,13 @@ public class PaymentController {
 	@Autowired
 	IOrderService orderService;
 	
-	@GetMapping("order/{orderID}")
+	@GetMapping(path = "order/{orderID}")
 	public PaymentInfo getPaymentByOrderID(@PathVariable("orderID") int orderID) {
 		Optional<Order> opt = orderService.findById(orderID);
 		
 		if(opt.isPresent() && opt.get().isPaymented()) {
 			Optional<PaymentInfo> paymentOpt = paymentInfoService.findByOrder(opt.get());
-			
+
 			if(paymentOpt.get() != null) {
 				return paymentOpt.get();
 			}

@@ -5,6 +5,7 @@
  */
 package com.example.rubikShopApi.entity;
 
+import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,4 +52,7 @@ public class User {
 	@JsonIgnore
 	@OneToOne(mappedBy = "user")
 	private Cart cart;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+	private List<Review> reviews;
 }

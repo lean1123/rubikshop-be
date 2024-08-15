@@ -48,4 +48,8 @@ public class Product {
     private CartDetail cartDetail;
     
     private Boolean active;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    private List<Review> reviews;
 }

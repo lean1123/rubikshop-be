@@ -8,6 +8,7 @@ import com.example.rubikShopApi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,7 @@ public class OrderService implements IOrderService {
 	public Optional<Order> findById(Integer id) {
 		return orderRepository.findById(id);
 	}
+
 
 	@Override
 	public Page<Order> findByUser(Pageable pageable) {
