@@ -53,6 +53,7 @@ public class User {
 	@OneToOne(mappedBy = "user")
 	private Cart cart;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
 	private List<Review> reviews;
 }

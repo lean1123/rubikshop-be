@@ -30,6 +30,7 @@ public class Review {
     @JoinColumn(name = "productId", referencedColumnName = "productId")
     private Product product;
 
+
     private String comment;
 
     @Enumerated

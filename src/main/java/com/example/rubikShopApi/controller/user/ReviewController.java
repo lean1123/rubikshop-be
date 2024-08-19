@@ -9,16 +9,20 @@ import com.example.rubikShopApi.service.IProductService;
 import com.example.rubikShopApi.service.IReviewService;
 import com.example.rubikShopApi.service.IStorageService;
 import com.example.rubikShopApi.service.IUserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("reviews")
@@ -30,6 +34,7 @@ public class ReviewController {
     @Autowired
     IUserService userService;
 
+
     @Autowired
     IProductService productService;
 
@@ -37,18 +42,24 @@ public class ReviewController {
     Cloudinary cloudinary;
 
     @GetMapping("getAllPageable")
-    public ResponseEntity<?> getAllPageable(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "9") int size, @RequestParam(defaultValue = "asc") String sort) {
+    public ResponseEntity<?> getAllPageable(@RequestParam Integer productID, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "9") int size, @RequestParam(defaultValue = "dsc") String sort) {
 
         Sort sortDirection = sort.equalsIgnoreCase("asc") ? Sort.by("updatedDate").ascending()
                 : Sort.by("updatedDate").descending();
 
         Pageable pageable = PageRequest.of(page, size, sortDirection);
 
-        return ResponseEntity.ok().body(reviewService.findAll(pageable));
+        var product = productService.findById(productID);
+
+        if (product.isEmpty()) {
+            return ResponseEntity.internalServerError().body("Error: Can't get product!");
+        }
+
+        return ResponseEntity.ok().body(reviewService.findAllByProduct(product.get(), pageable));
     }
 
     @PostMapping(value = "addReview", consumes = {"multipart/form-data"})
-    public ResponseEntity<?> addReview(@ModelAttribute ReviewRequest request, BindingResult result) {
+    public ResponseEntity<?> addReview(@Valid @ModelAttribute ReviewRequest request, BindingResult result) {
 
         if (result.hasErrors()) {
             return ResponseEntity.badRequest().body(result.toString());
@@ -58,7 +69,7 @@ public class ReviewController {
 
         var user = userService.findById(request.getUserID());
 
-        if(user == null){
+        if (user == null) {
             return ResponseEntity.badRequest().body("Error: User isn't exist!");
         }
 
@@ -66,7 +77,7 @@ public class ReviewController {
 
         var product = productService.findById(request.getProductID());
 
-        if(product.isEmpty()){
+        if (product.isEmpty()) {
             return ResponseEntity.badRequest().body("Error: Product isn't exist!");
         }
 
@@ -74,26 +85,25 @@ public class ReviewController {
 
         var listFile = request.getListImageFile();
 
-        List<String> listImageUrl = null;
-        if (!(listFile.length == 0)) {
-            listImageUrl = new ArrayList<>();
+        if (listFile == null || listFile.length == 0) {
+            entity.setListImageReview(null);
+        } else {
+
+            AtomicReference<List<String>> listImageUrl = new AtomicReference<>(new ArrayList<>());
+
+            Thread uploadListImage = getThread(listFile, listImageUrl);
+
             try {
-                for(int i =0; i<request.getListImageFile().length; i++){
-                    Map cloudinaryResult = cloudinary.uploader().upload(listFile[i].getBytes(),
-                            ObjectUtils.asMap("resource_type", "auto"));
-
-                    String imageUrl = (String) cloudinaryResult.get("secure_url");
-                    listImageUrl.add(imageUrl);
-                }
-
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
+                uploadListImage.join();
+                entity.setListImageReview(listImageUrl.get());
+            } catch (InterruptedException e) {
+                // Handle thread interruption.
                 e.printStackTrace();
-                return ResponseEntity.badRequest().body("Error while upload file from server!");
+                return ResponseEntity.badRequest().body("Error while uploading list image!");
             }
+
         }
 
-        entity.setListImageReview(listImageUrl);
 
         entity.setComment(request.getComment());
 
@@ -106,4 +116,25 @@ public class ReviewController {
         return ResponseEntity.ok().body("Insert success");
     }
 
+    private Thread getThread(MultipartFile[] listFile, AtomicReference<List<String>> listImageUrl) {
+        Thread uploadListImage = new Thread(() -> {
+
+            Arrays.stream(listFile).parallel().forEach(multipartFile ->
+            {
+                Map cloudinaryResult = null;
+                try {
+                    cloudinaryResult = cloudinary.uploader().upload(multipartFile.getBytes(),
+                            ObjectUtils.asMap("resource_type", "auto"));
+                    String imageUrl = (String) cloudinaryResult.get("secure_url");
+                    listImageUrl.get().add(imageUrl);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+
+        });
+        uploadListImage.start();
+        return uploadListImage;
+    }
 }

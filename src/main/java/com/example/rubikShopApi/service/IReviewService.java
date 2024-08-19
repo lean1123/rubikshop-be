@@ -1,5 +1,6 @@
 package com.example.rubikShopApi.service;
 
+import com.example.rubikShopApi.entity.Product;
 import com.example.rubikShopApi.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface IReviewService {
     List<Review> findAll(Sort sort);
 
     Page<Review> findAll(Pageable pageable);
+
+    Page<Review> findAllByProduct(Product product, Pageable pageable);
 }

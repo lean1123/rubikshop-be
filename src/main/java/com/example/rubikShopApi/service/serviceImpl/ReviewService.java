@@ -1,5 +1,6 @@
 package com.example.rubikShopApi.service.serviceImpl;
 
+import com.example.rubikShopApi.entity.Product;
 import com.example.rubikShopApi.entity.Review;
 import com.example.rubikShopApi.repository.ReviewRepository;
 import com.example.rubikShopApi.service.IReviewService;
@@ -50,4 +51,10 @@ public class ReviewService implements IReviewService {
     public Page<Review> findAll(Pageable pageable) {
         return reviewRepository.findAll(pageable);
     }
+
+    @Override
+    public Page<Review> findAllByProduct(Product product, Pageable pageable) {
+        return reviewRepository.findAllByProduct(product, pageable);
+    }
+
 }
