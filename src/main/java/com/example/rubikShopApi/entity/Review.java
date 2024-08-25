@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
 @Table(name="reviews")
 public class Review {
     @Id

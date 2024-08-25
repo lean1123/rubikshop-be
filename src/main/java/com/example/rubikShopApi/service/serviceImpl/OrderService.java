@@ -1,14 +1,16 @@
 package com.example.rubikShopApi.service.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.rubikShopApi.entity.OrderDetail;
+import com.example.rubikShopApi.entity.Product;
 import com.example.rubikShopApi.entity.User;
 import com.example.rubikShopApi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -71,4 +73,28 @@ public class OrderService implements IOrderService {
                 , pageable)).orElse(null);
 
     }
+
+	@Override
+	public List<Order> findOrdersByUser(User user) {
+		return orderRepository.findOrdersByUser(user);
+	}
+
+
+	@Override
+	public List<OrderDetail> getAllOrderDetaisFromListOrders(List<Order> orderList) {
+		List<OrderDetail> orderDetails = new ArrayList<>();
+
+		orderList.forEach(order -> {
+			if (order.isPaymented()) {
+				orderDetails.addAll(order.getOrderDetail());
+			}
+		});
+
+		return orderDetails;
+	}
+
+	@Override
+	public boolean checkProductIsExistedInListOrder(List<OrderDetail> orderDetails, Product product) {
+		return orderDetails.stream().anyMatch(orderDetail -> orderDetail.getProduct().equals(product));
+	}
 }
