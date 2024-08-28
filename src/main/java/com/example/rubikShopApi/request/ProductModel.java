@@ -53,4 +53,6 @@ public class ProductModel {
     
     private Boolean isEdit = false;
 
+    private String additionalInfo;
+
 }

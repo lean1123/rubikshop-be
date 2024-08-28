@@ -54,4 +54,7 @@ public class Product {
     @JsonIgnore
     @ToString.Exclude
     private List<Review> reviews;
+
+    @Column(name = "additionalInfo", columnDefinition = "nvarchar(max)")
+    private String additionalInfo;
 }
