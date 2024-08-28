@@ -2,6 +2,7 @@ package com.example.rubikShopApi.controller.user;
 
 import java.util.Optional;
 
+import com.example.rubikShopApi.entity.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.rubikShopApi.entity.User;
+
 import com.example.rubikShopApi.request.LoginForm;
 import com.example.rubikShopApi.request.RegisterForm;
 import com.example.rubikShopApi.request.ResponseObject;
@@ -36,7 +37,7 @@ public class UserController {
 	@Autowired
 	AuthenticationService authenticationService;
 
-	@PostMapping("/register")
+	@PostMapping(value = "/register", produces = "application/json")
 	public ResponseEntity<ResponseObject> register(@RequestBody @Valid RegisterForm registerForm,
 			BindingResult result) {
 
