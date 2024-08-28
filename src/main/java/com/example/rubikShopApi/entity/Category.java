@@ -32,7 +32,7 @@ public class Category {
 
 	@ToString.Exclude
 	@JsonIgnore
-	@OneToMany(mappedBy = "category", cascade = { CascadeType.MERGE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "category", cascade = { CascadeType.MERGE })
 	private List<Product> products;
 
 	public Category(int categoryID, String categoryName, String categoryImage) {

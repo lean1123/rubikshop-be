@@ -36,20 +36,25 @@ public class Product {
     private Category category;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product")
+    @ToString.Exclude
     private List<OrderDetail> orderDetails;
     
     private double unitPrice;
     private int unitInStock;
     private String image;
-    
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.MERGE)
     @JsonIgnore
-    @OneToOne(mappedBy = "product")
     private CartDetail cartDetail;
     
     private Boolean active;
 
+    @OneToMany(mappedBy = "product")
     @JsonIgnore
-    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Review> reviews;
+
+    @Column(name = "additionalInfo", columnDefinition = "nvarchar(max)")
+    private String additionalInfo;
 }

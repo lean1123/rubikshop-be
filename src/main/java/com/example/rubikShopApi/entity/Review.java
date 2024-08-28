@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
 @Table(name="reviews")
 public class Review {
     @Id
@@ -29,6 +28,7 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "productId", referencedColumnName = "productId")
     private Product product;
+
 
     private String comment;
 

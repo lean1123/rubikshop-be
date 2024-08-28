@@ -46,13 +46,15 @@ public class User {
 
 	@JsonIgnore
 	@ToString.Exclude
-	@OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE})
+	@OneToMany(mappedBy = "user")
 	private List<Order> orders;
 	
 	@JsonIgnore
-	@OneToOne(mappedBy = "user")
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 	private Cart cart;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	@ToString.Exclude
 	private List<Review> reviews;
 }

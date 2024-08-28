@@ -30,7 +30,7 @@ public class OrderDetail {
 	private Order order;
 
 	
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne
 	@JoinColumn(name = "product_Id")
 	@MapsId("productId")
 	private Product product;
