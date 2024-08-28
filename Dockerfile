@@ -12,4 +12,4 @@ RUN mvn clean install -U
 
 COPY src ./src
 
-CMD ["./mvn" "spring-boot:run"] 
+CMD ["./mvn", "spring-boot:run"]
